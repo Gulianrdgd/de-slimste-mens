@@ -1,211 +1,146 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Slimste from '../public/images/deslimste.svg'
+import { signIn, signOut, useSession } from 'next-auth/client'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { router } from 'next/client'
 
-export const Home = (): JSX.Element => (
-  <div className="container">
-    <Head>
-      <title>Create Next App</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
 
-    <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function Index( ) : JSX.Element{
 
-      <p className="description">
-        Get started by editing <code>pages/index.tsx</code>
-      </p>
+  function Capital(username: string):string{
+    return username[0].toUpperCase()+username.slice(1);
+  }
 
-      <button
-        onClick={() => {
-          window.alert('With typescript and Jest')
-        }}
-      >
-        Test Button
-      </button>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [session, loading] = useSession();
+  useEffect(() => {
+    setState({...state, auth_error: window.location.href.includes("CredentialsSignin")});
+  });
 
-      <div className="grid">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+  const [state, setState]= useState({
+    username: "",
+    password: "",
+    auth_error: false
+  });
 
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
+  function handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
+    setState({...state,username: event.target.value})
+  }
 
-        <a
-          href="https://github.com/vercel/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-        </a>
+  function handlePasswordChange(event: ChangeEvent<HTMLInputElement>) {
+    setState({...state,password: event.target.value})
+  }
+  function handleSignInSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    // eslint-disable-next-line no-console
+    signIn('credentials',{
+      username: state.username,
+      password: state.password
+    })
+      .then(authenticated => {
+        // eslint-disable-next-line no-console
+        console.log("Auth: ", authenticated);
+        //router.push(`/auth/callback`);
+      })
+      .catch(() => {
+        alert("Authentication failed.");
+      });
+  }
+    return(
+    <>
+      <div>
+        <Head>
+          <title>De slimste mens | welcome</title>
+          <meta charSet="utf-8"/>
+          <meta name="description" content="De slimste mens portal"/>
+          <meta name="author" content="Julian van der Horst"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta name="og:title" property="og:title" content="De slimste mens | Portal"/>
+          <meta name="og:description" property="og:description" content="Please login to get to your slimste mens screen"/>
+        </Head>
+        <body>
+        <div className={"flex flex-row justify-center"}>
+          <div className={"ml-20"}>
+            <Slimste />
+          </div>
+          <div className={"flex flex-auto justify-center"}>
+            <div className={"flex flex-col justify-center"}>
+              {!session &&
+              <div className={"mr-20"}>
+                <h1 className={"text-white text-6xl mt-2"}>Welcome</h1>
+                <h1 className={"text-white text-5xl mt-10"}>It looks like your are <br />not logged in</h1>
+                <form
+                  className={"mt-10"}
+                  id="signin"
+                  onSubmit={handleSignInSubmit}
+                >
+                  <p>
+                    <label className={"text-white text-xl"} htmlFor="username">Username</label>
+                    <br />
+                    <input
+                      name="username"
+                      type="text"
+                      placeholder="username"
+                      id="username"
+                      className={"mt-3 form-control rounded-full py-3 px-6"}
+                      onChange={handleUsernameChange}
+                    />
+                  </p>
+                  <p className={"mt-5"}>
+                    <label className={" text-white text-xl"} htmlFor="password">Password</label>
+                    <br />
+                    <input
+                      name="password"
+                      type="password"
+                      placeholder=""
+                      id="password"
+                      className={"mt-3 form-control rounded-full py-3 px-6"}
+                      onChange={handlePasswordChange}
+                    />
+                    <p className={"mt-5 text-red-400 text-l"}>{state.auth_error && "Wrong credentials"}</p>
+                  </p>
+                    <button
+                      id="submitButton"
+                      type="submit"
+                      className="mt-10 bg-dsm p-5 text-white rounded-full py-3 px-6"
+                    >
+                      Sign in
+                    </button>
+                </form>
+              </div>
+              }
+              {session &&
+              <div className={"mr-20"}>
+                <h1 className={"text-white italic text-6xl"}>Hello {Capital(session.user.username)}</h1>
+                <div className={"flex flex-col justify-center"}>
+                  <button className={"mt-10 bg-dsm p-5 rounded-full py-3 px-6 text-black font-bold w-64"}>Get to your
+                    game screen
+                  </button>
+                  <button className={"mt-10 bg-dsm p-5 rounded-full py-3 px-6 w-32 text-black font-bold"}
+                          onClick={() => signOut()}>Sign Out
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        </body>
+        <footer className={"bottom-0 absolute h-20 w-screen bg-gray-200"}>
+          <div className="text-center flex justify-center flex-col">
+            <p className={"mt-4"}>
+              <strong>De slimste mens</strong> by <a className={"text-primary"} href="https://vdhorst.dev">Julian van
+              der
+              Horst</a><br />
+              You can look at the source code on <a
+              href={"https://github.com/Gulianrdgd/Bussen-online-drinking-game-v2"}> my github</a>
+            </p>
+          </div>
+        </footer>
       </div>
-    </main>
+    </>
+    )
+}
 
-    <footer>
-      <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by{' '}
-        <Image src="/vercel.svg" alt="Vercel Logo" height={'32'} width={'64'} />
-      </a>
-    </footer>
-
-    <style jsx>{`
-      .container {
-        min-height: 100vh;
-        padding: 0 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      main {
-        padding: 5rem 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer {
-        width: 100%;
-        height: 100px;
-        border-top: 1px solid #eaeaea;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer img {
-        margin-left: 0.5rem;
-      }
-
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .title a {
-        color: #0070f3;
-        text-decoration: none;
-      }
-
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
-        text-decoration: underline;
-      }
-
-      .title {
-        margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
-      }
-
-      .title,
-      .description {
-        text-align: center;
-      }
-
-      .description {
-        line-height: 1.5;
-        font-size: 1.5rem;
-      }
-
-      code {
-        background: #fafafa;
-        border-radius: 5px;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-      }
-
-      .grid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        max-width: 800px;
-        margin-top: 3rem;
-      }
-
-      .card {
-        margin: 1rem;
-        flex-basis: 45%;
-        padding: 1.5rem;
-        text-align: left;
-        color: inherit;
-        text-decoration: none;
-        border: 1px solid #eaeaea;
-        border-radius: 10px;
-        transition: color 0.15s ease, border-color 0.15s ease;
-      }
-
-      .card:hover,
-      .card:focus,
-      .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
-      }
-
-      .card h3 {
-        margin: 0 0 1rem 0;
-        font-size: 1.5rem;
-      }
-
-      .card p {
-        margin: 0;
-        font-size: 1.25rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 600px) {
-        .grid {
-          width: 100%;
-          flex-direction: column;
-        }
-      }
-    `}</style>
-
-    <style jsx global>{`
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-    `}</style>
-  </div>
-)
-
-export default Home
+export  default  Index;
