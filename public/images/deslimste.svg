@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="900px"
+   height="900px"
+   viewBox="0 0 900 900"
+   version="1.1"
+   id="SVGRoot">
+  <defs
+     id="defs843" />
+  <metadata
+     id="metadata846">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <g
+       id="g27"
+       transform="translate(25.101928)">
+      <path
+         id="path856"
+         style="fill:#f58233;fill-opacity:1;stroke-width:0.716118"
+         d="M 274.87723,328.01538 A 206.54323,121.98424 0 0 0 68.333423,450 206.54323,121.98424 0 0 0 274.87723,571.98462 206.54323,121.98424 0 0 0 481.42104,450 206.54323,121.98424 0 0 0 274.87723,328.01538 Z m 0,88.65636 a 111.93563,61.982206 0 0 1 111.93621,61.98124 111.93563,61.982206 0 0 1 -111.93621,61.98259 111.93563,61.982206 0 0 1 -111.93622,-61.98259 111.93563,61.982206 0 0 1 111.93622,-61.98124 z" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:63.9933px;line-height:1.25;font-family:sans-serif;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.59983"
+         x="641.59344"
+         y="391.42914"
+         id="text1888"
+         transform="skewX(-15.250685)"><tspan
+           id="tspan1886"
+           x="641.59344"
+           y="391.42914"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:63.9933px;font-family:Camber;-inkscape-font-specification:'Camber, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:1.59983"
+           dx="0"
+           dy="0">DE</tspan><tspan
+           x="641.59344"
+           y="472.04568"
+           id="tspan1890"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:63.9933px;font-family:Camber;-inkscape-font-specification:'Camber, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:1.59983">SLIMSTE</tspan><tspan
+           x="641.59344"
+           y="552.66223"
+           id="tspan1892"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:63.9933px;font-family:Camber;-inkscape-font-specification:'Camber, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:1.59983">MENS</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -2,9 +2,8 @@ import Head from 'next/head'
 import Slimste from '../public/images/deslimste.svg'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { router } from 'next/client'
-
-
+import { useRouter } from 'next/router'
+import User from '../models/User'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Index( ) : JSX.Element{
 
@@ -14,9 +13,16 @@ export function Index( ) : JSX.Element{
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [session, loading] = useSession();
-  useEffect(() => {
-    setState({...state, auth_error: window.location.href.includes("CredentialsSignin")});
-  });
+  const router = useRouter();
+
+  let init = true;
+
+  if(init) {
+    useEffect(() => {
+        setState({ ...state, auth_error: window.location.href.includes("CredentialsSignin") });
+    }, []);
+    init = false;
+  }
 
   const [state, setState]= useState({
     username: "",
@@ -31,25 +37,32 @@ export function Index( ) : JSX.Element{
   function handlePasswordChange(event: ChangeEvent<HTMLInputElement>) {
     setState({...state,password: event.target.value})
   }
-  function handleSignInSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSignInSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // eslint-disable-next-line no-console
-    signIn('credentials',{
+    await signIn('credentials',{
       username: state.username,
       password: state.password
     })
-      .then(authenticated => {
-        // eslint-disable-next-line no-console
-        console.log("Auth: ", authenticated);
-        //router.push(`/auth/callback`);
-      })
-      .catch(() => {
-        alert("Authentication failed.");
-      });
   }
-    return(
+
+  function toTheGame() {
+    if('role' in session.user) {
+      switch ((session.user as User).role) {
+        case "admin":
+          router.push("/admin")
+          break;
+        case "overlay":
+          router.push("/stream-overlay");
+          break;
+        case "user":
+          router.push("/contestant");
+          break;
+      }
+    }
+  }
+
+  return(
     <>
-      <div>
         <Head>
           <title>De slimste mens | welcome</title>
           <meta charSet="utf-8"/>
@@ -59,7 +72,6 @@ export function Index( ) : JSX.Element{
           <meta name="og:title" property="og:title" content="De slimste mens | Portal"/>
           <meta name="og:description" property="og:description" content="Please login to get to your slimste mens screen"/>
         </Head>
-        <body>
         <div className={"flex flex-row justify-center"}>
           <div className={"ml-20"}>
             <Slimste />
@@ -85,6 +97,7 @@ export function Index( ) : JSX.Element{
                       id="username"
                       className={"mt-3 form-control rounded-full py-3 px-6"}
                       onChange={handleUsernameChange}
+                      value={state.username}
                     />
                   </p>
                   <p className={"mt-5"}>
@@ -96,10 +109,11 @@ export function Index( ) : JSX.Element{
                       placeholder=""
                       id="password"
                       className={"mt-3 form-control rounded-full py-3 px-6"}
+                      value={state.password}
                       onChange={handlePasswordChange}
                     />
-                    <p className={"mt-5 text-red-400 text-l"}>{state.auth_error && "Wrong credentials"}</p>
                   </p>
+                  <p className={"mt-5 text-red-400 text-l"}>{state.auth_error && "Wrong credentials"}</p>
                     <button
                       id="submitButton"
                       type="submit"
@@ -112,9 +126,9 @@ export function Index( ) : JSX.Element{
               }
               {session &&
               <div className={"mr-20"}>
-                <h1 className={"text-white italic text-6xl"}>Hello {Capital(session.user.username)}</h1>
+                <h1 className={"text-white italic text-6xl"}>Hello {Capital((session.user as User).username)}</h1>
                 <div className={"flex flex-col justify-center"}>
-                  <button className={"mt-10 bg-dsm p-5 rounded-full py-3 px-6 text-black font-bold w-64"}>Get to your
+                  <button className={"mt-10 bg-dsm p-5 rounded-full py-3 px-6 text-black font-bold w-64"} onClick={toTheGame} >Get to your
                     game screen
                   </button>
                   <button className={"mt-10 bg-dsm p-5 rounded-full py-3 px-6 w-32 text-black font-bold"}
@@ -126,7 +140,6 @@ export function Index( ) : JSX.Element{
             </div>
           </div>
         </div>
-        </body>
         <footer className={"bottom-0 absolute h-20 w-screen bg-gray-200"}>
           <div className="text-center flex justify-center flex-col">
             <p className={"mt-4"}>
@@ -138,7 +151,6 @@ export function Index( ) : JSX.Element{
             </p>
           </div>
         </footer>
-      </div>
     </>
     )
 }

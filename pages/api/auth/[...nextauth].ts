@@ -25,8 +25,6 @@ const options: InitOptions = {
         // Add logic here to look up the user from the credentials supplied
         // const hash = await bcrypt.hash(credentials.password, saltRounds);
         const data = await query(credentials.username);
-        // // eslint-disable-next-line no-console
-        // console.log("cred: ", credentials, "data: ", data);
         if (data[0]) {
           const res = await bcrypt.compare(credentials.password, data[0].password_hash)
           if (res) {
@@ -117,13 +115,13 @@ const options: InitOptions = {
     // signIn: async (user, account, profile) => { return Promise.resolve(true) },
     // redirect: async (url, baseUrl) => { return Promise.resolve(baseUrl) },
     session: async(session, user :User) => {
-      return { ...session, user: { username: user.username} };
+      return { ...session, user: { username: user.username, role: user.role} };
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     jwt:  async (token, user: User, account, profile, isNewUser) => {
       // eslint-disable-next-line no-console
       //console.log('user Hier: ', user, ',\n account Hier: ', account, ',\n profile Hier: ', profile, ',\n newUser Hier: ', isNewUser)
-      if(user){token.username = user.username}
+      if(user){token.username = user.username; token.role = user.role}
       return token;
     }
   },
