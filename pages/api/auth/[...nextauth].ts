@@ -4,7 +4,7 @@ import Providers from 'next-auth/providers'
 
 const bcrypt = require('bcrypt')
 // const saltRounds = 10;
-import query from '../db/db'
+import { query } from '../db/db'
 import Models  from '../../../models/'
 import User from '../../../models/User';
 import Adapters from 'next-auth/adapters'

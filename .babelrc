@@ -1,4 +1,6 @@
 {
   "presets": ["next/babel"],
-  "plugins": ["inline-react-svg"]
+  "plugins": ["inline-react-svg", ["transform-postcss", {
+    "config": "configuration/postcss.config.js"
+  }]]
 }
