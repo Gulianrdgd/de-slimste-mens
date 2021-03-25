@@ -16,7 +16,6 @@ export function Table (props: Prop): JSX.Element {
 
   function Answer(props: PropAnswer): JSX.Element{
     const temp = []
-    console.log("Props:", props);
     if(props.answers) {
       if (props.round === 1) {
         temp.push(props.answers[0]);
@@ -33,8 +32,7 @@ export function Table (props: Prop): JSX.Element {
         });
       }
     }
-    console.log("Temp:", temp);
-    return (<td>{temp}</td>)
+    return (<td className={"text-center"}>{temp}</td>)
   }
 
   function Table(): JSX.Element{
@@ -44,22 +42,21 @@ export function Table (props: Prop): JSX.Element {
     qInput.push(
       <thead>
       <tr>
-        <th>Round</th>
-        <th>Question</th>
-        <th>Answers</th>
+        <th className={"text-center"}>Round</th>
+        <th className={"text-center"}>Question</th>
+        <th className={"text-center"}>Answers</th>
       </tr>
       </thead>
     )
-    console.log("Props before map:", props.data);
     props.data.map(e => qTemp.push(
       <tr key={e.qid}>
-        <td>{e.round}</td>
-        <td>{e.question}</td>
+        <td className={"text-center"}>{e.round}</td>
+        <td className={"text-center"}>{e.question}</td>
         <Answer round={e.round} answers={e.answers}/>
       </tr>
     ))
     qInput.push(<tbody>{qTemp}</tbody>);
-    return (<table>{qInput}</table>)
+    return (<div className={"bg-dsm p-4 rounded"}><table className={"bg-white table table-auto"}>{qInput}</table></div>)
   }
 
   return(

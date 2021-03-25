@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import next from "next";
 import { getSession } from 'next-auth/client'
-import { createQuestion, getQuestions } from './pages/api/db/db'
+import { createQuestion, getQuestions, toggleSlimsteMensStarted } from './pages/api/db/db'
 import * as http from 'http'
 import * as socketio from 'socket.io';
 
@@ -43,6 +43,11 @@ nextApp.prepare().then(async() => {
     socket.on('getQ', () => {
       getQuestions().then(e => {
         socket.emit('?newTable', {question: e})
+      })
+    })
+    socket.on('?toggleGame', () => {
+      toggleSlimsteMensStarted().then(e => {
+        socket.emit('?toggled', {response: e});
       })
     })
   })

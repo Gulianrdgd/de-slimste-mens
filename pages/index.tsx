@@ -140,7 +140,7 @@ export function Index( ) : JSX.Element{
             </div>
           </div>
         </div>
-        <footer className={"bottom-0 absolute h-20 w-screen bg-gray-200"}>
+        <footer className={"bottom-0 h-20 w-screen bg-gray-200"}>
           <div className="text-center flex justify-center flex-col">
             <p className={"mt-4"}>
               <strong>De slimste mens</strong> by <a className={"text-primary"} href="https://vdhorst.dev">Julian van

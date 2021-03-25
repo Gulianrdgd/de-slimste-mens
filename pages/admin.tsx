@@ -1,16 +1,17 @@
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { signIn, signOut, useSession } from 'next-auth/client';
-import Head from 'next/head';
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router';
-import React from 'react';
-import { Table } from '../Components/Table';
-import {NewQuestions} from '../Components/newQuestion';
+import { useSession } from 'next-auth/client'
+import Head from 'next/head'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { Table } from '../Components/Table'
+import { NewQuestions } from '../Components/newQuestion'
 import { io, Socket } from 'socket.io-client'
 import { TopSelection } from '../Components/TopSelection'
+import { Selection } from '../models/selection'
+import AdminGame from '../Components/AdminGame'
+import Button from 'Components/Button'
 
-enum Selection {
+enum SelectionQuestion {
   init,
   newQuestion
 }
@@ -22,14 +23,15 @@ function Admin( ) : JSX.Element{
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, setState]= useState({
-    selected: Selection.init,
+    selected: SelectionQuestion.init,
+    selectedTop: Selection.Game,
     socket: Socket,
-    question: []
+    question: [],
+    gameHasStarted: false
   });
 
 
   useEffect(() => {
-    console.log("Niet te vaak");
     if(!session && !loading){
     router.push("/?error=notLoggedIn");
     }
@@ -41,15 +43,28 @@ function Admin( ) : JSX.Element{
     else{
       state.socket.on('?newTable', data => {
         setState({...state, question: data.question});
+      });
+      state.socket.on('?toggled', data => {
+        console.log(data);
       })
     }
   });
 
+  function toggleSelection(select: Selection): void{
+    setState({...state, selectedTop: select});
+  }
+
+  function toggleGame(): void{
+    console.log("CLICK");
+    setState({...state, gameHasStarted: !state.gameHasStarted});
+    state.socket.emit('?toggleGame');
+  }
+
   function toggleState(): void{
-    if(state.selected === Selection.init) {
-      setState({ ...state, selected: Selection.newQuestion });
+    if(state.selected === SelectionQuestion.init) {
+      setState({ ...state, selected: SelectionQuestion.newQuestion });
     }else{
-      setState({ ...state, selected: Selection.init });
+      setState({ ...state, selected: SelectionQuestion.init });
     }
   }
 
@@ -64,18 +79,25 @@ function Admin( ) : JSX.Element{
         <meta name="og:title" property="og:title" content="De slimste mens | Admin"/>
         <meta name="og:description" property="og:description" content="Admin screen where the views of the contestants be controlled"/>
       </Head>
-      <TopSelection/>
+      <TopSelection changeSelection={toggleSelection}/>
       <div className={"flex flex-row justify-center"}>
-        {state.selected === Selection.newQuestion && <NewQuestions socket={state.socket} toggle={toggleState} />}
-        {state.selected === Selection.init &&
-        <div>
-          {<Table data={state.question} />}
-          <button className={"mt-10 bg-dsm flex-none self-start p-5 text-white rounded-full py-3 px-6"}
-                  onClick={() => toggleState()}> Add new question</button>
-        </div>
+        { state.selectedTop === Selection.Questions &&
+          <>
+            {state.selected === SelectionQuestion.newQuestion &&
+            <NewQuestions socket={state.socket} toggle={toggleState} />}
+            {state.selected === SelectionQuestion.init &&
+            <div className={"m-12 flex flex-col justify-center"}>
+              <Table data={state.question} />
+              <Button onClick={toggleState} text={"Add new question"}/>
+            </div>
+            }
+          </>
+        }
+        { state.selectedTop === Selection.Game &&
+          <AdminGame toggle={toggleGame}/>
         }
       </div>
-      <footer className={"sticky bottom-0 absolute h-20 w-screen bg-gray-200"}>
+      <footer className={"bottom-0 absolute h-20 w-screen bg-gray-200"}>
         <div className="text-center flex justify-center flex-col">
           <p className={"mt-4"}>
             <strong>De slimste mens</strong> by <a className={"text-primary"} href="https://vdhorst.dev">Julian van

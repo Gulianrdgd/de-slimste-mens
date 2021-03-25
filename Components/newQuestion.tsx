@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Socket } from 'socket.io-client'
+import Button from './Button';
 
 interface Round {
   round: number
@@ -59,6 +60,11 @@ export function NewQuestions (props: Sock): JSX.Element {
     props.toggle();
   }
 
+  function goBack(): void{
+    setState({...state, round: -1, error: "", answer: [], question: ""});
+    props.toggle();
+  }
+
   function AnswerQuestion(props: Round): JSX.Element{
     if(props.round >= 0) {
       const times = numberOfAnswers[props.round];
@@ -101,6 +107,9 @@ export function NewQuestions (props: Sock): JSX.Element {
           id="newQuestion"
           onSubmit={handleQuestionSubmit}>
         <div className={"px-2"}>
+          <Button text={"Back"} className={""} onClick={goBack}/>
+        </div>
+        <div className={"px-2"}>
           <label className={"text-white flex-none self-start text-xl"} htmlFor="username">Round</label>
           <br />
           <select className={"flex-none self-start rounded-full py-3 px-6 mt-3"} id="round" name="Round" onChange={handleRoundChange} >
@@ -136,7 +145,7 @@ export function NewQuestions (props: Sock): JSX.Element {
           <button
           id="submitButton"
           type="submit"
-          className="mt-10 bg-dsm flex-none self-start p-5 text-white rounded-full py-3 px-6"
+          className="mt-10 bg-dsm flex-none self-start text-white rounded-full py-3 px-6"
           >
           Submit
           </button>
