@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { Socket } from 'socket.io-client'
 import Button from './Button';
 
@@ -9,7 +9,7 @@ interface Sock{
   socket: Socket;
   toggle: () => void;
 }
-const numberOfAnswers = [5, 1, 4, 12, 10];
+const numberOfAnswers = [5, 1, 4, 12, 5];
 export function NewQuestions (props: Sock): JSX.Element {
 
   const [state, setState]= useState({
@@ -20,15 +20,19 @@ export function NewQuestions (props: Sock): JSX.Element {
     socket: props.socket,
     error: "",
   });
-
-  state.socket.on('db', (data) => {
-    if(data.succeed){
-      setState({...state, question: "", round: -1, answer: []})
-    }else{
-      console.log("Something happend", data.error);
-      setState({...state, error: data.error});
+  useEffect(() => {
+    if(state.socket) {
+      state.socket.on('db', (data) => {
+        if (data.succeed) {
+          setState({ ...state, question: "", round: -1, answer: [] })
+        } else {
+          console.log("Something happend", data.error);
+          setState({ ...state, error: data.error });
+        }
+      });
     }
-  });
+  }, [])
+
 
   function handleQuestionChange(event: ChangeEvent<HTMLInputElement>): void {
     setState({...state, question: event.target.value})

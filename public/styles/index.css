@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 html{
-    background: #85090E;
+    background: transparent;
+    min-height: 100%;
 }
 
 select{
@@ -39,10 +40,43 @@ button::-moz-focus-inner {
     50% {
         opacity: 0;
     }
+    100%{
+        opacity: 1;
+    }
 }
 
+.grayScale{
+    filter: grayscale(100%);
+}
 
 .iframe{
     width: 50vh;
     height: 80vh;
+}
+
+.svgResponse{
+    width: inherit;
+    height: inherit;
+}
+
+.oval{
+    border-radius: 50%;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+.blurry-text {
+    text-shadow: 0 0 10px black;
+    color: transparent;
+}
+
+.h-huge{
+    height: 100vh;
 }

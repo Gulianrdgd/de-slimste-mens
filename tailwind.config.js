@@ -10,6 +10,8 @@ module.exports = {
         'primary' : '#0085FF',
         'dsm' :'#C76B2C',
         'dsm-bg' : '#85090E',
+        'dsm-dark-blue': '#004f99',
+        'dsm-bg-dark' : '#64070A'
       }
     },
   },

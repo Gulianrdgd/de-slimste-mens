@@ -1,5 +1,4 @@
 import question from '../models/Question'
-import { useEffect, useState } from 'react'
 
 interface Prop {
   data: question[]
@@ -9,10 +8,7 @@ interface PropAnswer{
   answers: string[]
 }
 
-export function Table (props: Prop): JSX.Element {
-  // const [state, setState]= useState({
-  //   data: this.props.data
-  // });
+export function TableQuestions (props: Prop): JSX.Element {
 
   function Answer(props: PropAnswer): JSX.Element{
     const temp = []
